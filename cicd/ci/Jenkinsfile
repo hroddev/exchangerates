@@ -7,6 +7,7 @@ pipeline {
         SONAR_AUTH_TOKEN = credentials('sonarqube')
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
         IMAGE_NAME = 'hroddev/exchangerates'
+        SONAR_HOST_URL = 'http://sonarqube:9000'  // Add this line
 
         //following is not required. You can skip.
         GRADLE_HOME = '/opt/gradle'
@@ -61,14 +62,16 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('SonarQube') {
-                        sh './gradlew sonar -Dsonar.login=$SONAR_AUTH_TOKEN'
+                        sh './gradlew sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=$SONAR_HOST_URL'
                     }
 
-                    def qualityGate = waitForQualityGate()
-                    if (qualityGate.status != 'OK') {
-                        error "SonarQube Quality Gate failed: ${qualityGate.status}"
-                    } else {
-                        echo "SonarQube Quality Gate passed."
+                    timeout(time: 2, unit: 'MINUTES') {  // Add timeout to prevent indefinite waiting
+                        def qualityGate = waitForQualityGate()
+                        if (qualityGate.status != 'OK') {
+                            error "SonarQube Quality Gate failed: ${qualityGate.status}"
+                        } else {
+                            echo "SonarQube Quality Gate passed."
+                        }
                     }
                 }
             }
