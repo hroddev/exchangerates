@@ -6,7 +6,7 @@ pipeline {
         REPO_URL = 'https://github.com/kodedge-swapneel/exchangerates.git'
         SONAR_AUTH_TOKEN = credentials('sonarqube')
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        IMAGE_NAME = 'kodedge/exchangerates'
+        IMAGE_NAME = 'hroddev/exchangerates'
 
         //following is not required. You can skip.
         GRADLE_HOME = '/opt/gradle'
@@ -169,8 +169,8 @@ pipeline {
                         gitUsernamePassword(credentialsId: GITHUB_CREDENTIALS_ID, gitToolName: 'Default')
                     ]) {
                         sh """
-                             git config user.email "kodedge-bot-ci@kodedge.com"
-                             git config user.name "kodedge-bot-ci"
+                             git config user.email "info@helixcloud.dev"
+                             git config user.name "hrodev-bot-cli"
                              git add k8chart/values.yaml
                              git commit -m "Update image tag to version ${imageTag}"
                              git push origin main
