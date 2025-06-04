@@ -7,6 +7,6 @@ metadata:
     argocd.argoproj.io/secret-type: repository
 type: Opaque
 stringData:
-  url: https://github.com/kodedge-swapneel/exchangerates.git
-  username: your_username@gmail.com
-  password: token
+  url: https://github.com/hroddev/exchangerates.git
+  username: hroddev
+  password: ${GITHUB_TOKEN}
